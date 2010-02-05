@@ -7,8 +7,6 @@
 JRE=$JAVA_HOME/jre
 JAVA=$JRE/bin/java
 
-QUARTZ=../..
-
 . ${QUARTZ}/examples/bin/buildcp.sh
 
 # Uncomment the following line if you would like to set log4j

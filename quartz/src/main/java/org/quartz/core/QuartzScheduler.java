@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
-import java.util.Timer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -51,16 +50,15 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerContext;
 import org.quartz.SchedulerException;
 import org.quartz.SchedulerListener;
+import org.quartz.listeners.SchedulerListenerSupport;
 import org.quartz.Trigger;
 import org.quartz.TriggerListener;
 import org.quartz.UnableToInterruptJobException;
 import org.quartz.impl.SchedulerRepository;
-import org.quartz.listeners.SchedulerListenerSupport;
 import org.quartz.simpl.SimpleJobFactory;
 import org.quartz.spi.JobFactory;
 import org.quartz.spi.SchedulerPlugin;
 import org.quartz.spi.SchedulerSignaler;
-import org.quartz.utils.UpdateChecker;
 
 /**
  * <p>
@@ -215,8 +213,6 @@ public class QuartzScheduler implements RemotableQuartzScheduler {
 
         signaler = new SchedulerSignalerImpl(this, this.schedThread);
         
-        scheduleUpdateCheck();
-        
         getLog().info("Quartz Scheduler v." + getVersion() + " created.");
     }
 
@@ -252,13 +248,6 @@ public class QuartzScheduler implements RemotableQuartzScheduler {
     public Log getLog() {
         return log;
     }
-    
-    /**
-     * Update checker scheduler - fires every week
-     */
-    private void scheduleUpdateCheck() {
-        new Timer(true).scheduleAtFixedRate(new UpdateChecker(), 1, 7 * 24 * 60 * 60 * 1000L);
-    }
 
     /**
      * Register the scheduler in the local MBeanServer.
@@ -270,7 +259,8 @@ public class QuartzScheduler implements RemotableQuartzScheduler {
         String jmxObjectName = resources.getJMXObjectName();
         
         registry.registerComponent(this, jmxObjectName, null);
-                getLog().info("Scheduler registered with local MBeanServer under name '" + jmxObjectName + "'");
+        
+        getLog().info("Scheduler registered with local MBeanServer under name '" + jmxObjectName + "'");
     }
 
     /**
