@@ -19,8 +19,8 @@ package org.quartz.examples.example3;
 
 import java.util.Date;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.quartz.CronTrigger;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
@@ -38,7 +38,7 @@ public class CronTriggerExample {
 
 
     public void run() throws Exception {
-        Logger log = LoggerFactory.getLogger(CronTriggerExample.class);
+        Log log = LogFactory.getLog(CronTriggerExample.class);
 
         log.info("------- Initializing -------------------");
 

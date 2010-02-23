@@ -17,8 +17,8 @@
 
 package org.quartz.simpl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.quartz.SchedulerConfigException;
 import org.quartz.spi.ThreadPool;
 
@@ -78,7 +78,7 @@ public class SimpleThreadPool implements ThreadPool {
 
     private String threadNamePrefix;
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
+    private final Log log = LogFactory.getLog(getClass());
     
     private String schedulerInstanceName;
 
@@ -128,7 +128,7 @@ public class SimpleThreadPool implements ThreadPool {
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
 
-    public Logger getLog() {
+    public Log getLog() {
         return log;
     }
 

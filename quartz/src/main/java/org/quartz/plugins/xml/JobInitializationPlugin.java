@@ -1,5 +1,5 @@
 /* 
- * Copyright 2001-2010 Terracotta, Inc. 
+ * Copyright 2001-2009 Terracotta, Inc. 
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not 
  * use this file except in compliance with the License. You may obtain a copy 
@@ -21,7 +21,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.Date;
@@ -43,7 +42,7 @@ import org.quartz.jobs.FileScanListener;
 import org.quartz.plugins.SchedulerPluginWithUserTransactionSupport;
 import org.quartz.simpl.CascadingClassLoadHelper;
 import org.quartz.spi.ClassLoadHelper;
-import org.quartz.xml.XMLSchedulingDataProcessor;
+import org.quartz.xml.JobSchedulingDataProcessor;
 
 /**
  * This plugin loads XML file(s) to add jobs and schedule them with triggers
@@ -56,19 +55,17 @@ import org.quartz.xml.XMLSchedulingDataProcessor;
  * </p>
  * 
  * <p>
- * If using this plugin with JobStoreCMT, be sure to set the
- * plugin property <em>wrapInUserTransaction</em> to true.  Also, if you have a 
+ * If using the JobInitializationPlugin with JobStoreCMT, be sure to set the
+ * plugin property <em>wrapInUserTransaction</em> to true.  Also, if have a 
  * positive <em>scanInterval</em> be sure to set 
  * <em>org.quartz.scheduler.wrapJobExecutionInUserTransaction</em> to true.
  * </p>
- * 
- * @see org.quartz.xml.XMLSchedulingDataProcessor
  * 
  * @author James House
  * @author Pierre Awaragi
  * @author pl47ypus
  */
-public class XMLSchedulingDataProcessorPlugin 
+public class JobInitializationPlugin 
     extends SchedulerPluginWithUserTransactionSupport 
     implements FileScanListener {
 
@@ -80,15 +77,21 @@ public class XMLSchedulingDataProcessorPlugin
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
     private static final int MAX_JOB_TRIGGER_NAME_LEN = 80;
-    private static final String JOB_INITIALIZATION_PLUGIN_NAME = "JobSchedulingDataLoaderPlugin";
+    private static final String JOB_INITIALIZATION_PLUGIN_NAME = "JobInitializationPlugin";
     private static final String FILE_NAME_DELIMITERS = ",";
     
+    private boolean overWriteExistingJobs = false;
+
     private boolean failOnFileNotFound = true;
 
-    private String fileNames = XMLSchedulingDataProcessor.QUARTZ_XML_DEFAULT_FILE_NAME;
+    private String fileNames = JobSchedulingDataProcessor.QUARTZ_XML_FILE_NAME;
 
     // Populated by initialization
     private Map jobFiles = new LinkedHashMap();
+
+    private boolean validating = false;
+    
+    private boolean validatingSchema = true;
 
     private long scanInterval = 0; 
     
@@ -106,7 +109,7 @@ public class XMLSchedulingDataProcessorPlugin
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
 
-    public XMLSchedulingDataProcessorPlugin() {
+    public JobInitializationPlugin() {
     }
 
     /*
@@ -131,6 +134,24 @@ public class XMLSchedulingDataProcessorPlugin
         this.fileNames = fileNames;
     }
     
+    /**
+     * Whether or not jobs defined in the XML file should be overwrite existing
+     * jobs with the same name.
+     */
+    public boolean isOverWriteExistingJobs() {
+        return overWriteExistingJobs;
+    }
+
+    /**
+     * Whether or not jobs defined in the XML file should be overwrite existing
+     * jobs with the same name.
+     * 
+     * @param overWriteExistingJobs
+     */
+    public void setOverWriteExistingJobs(boolean overWriteExistingJobs) {
+        this.overWriteExistingJobs = overWriteExistingJobs;
+    }
+
     /**
      * The interval (in seconds) at which to scan for changes to the file.  
      * If the file has been changed, it is re-loaded and parsed.   The default 
@@ -169,7 +190,35 @@ public class XMLSchedulingDataProcessorPlugin
         this.failOnFileNotFound = failOnFileNotFound;
     }
     
-     /*
+    /**
+     * Whether or not the XML should be validated. Default is <code>false</code>.
+     */
+    public boolean isValidating() {
+        return validating;
+    }
+
+    /**
+     * Whether or not the XML should be validated. Default is <code>false</code>.
+     */
+    public void setValidating(boolean validating) {
+        this.validating = validating;
+    }
+    
+    /**
+     * Whether or not the XML schema should be validated. Default is <code>true</code>.
+     */
+    public boolean isValidatingSchema() {
+        return validatingSchema;
+    }
+
+    /**
+     * Whether or not the XML schema should be validated. Default is <code>true</code>.
+     */
+    public void setValidatingSchema(boolean validatingSchema) {
+        this.validatingSchema = validatingSchema;
+    }
+
+    /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      * 
      * SchedulerPlugin Interface.
@@ -236,7 +285,6 @@ public class XMLSchedulingDataProcessorPlugin
                         job.getJobDataMap().put(FileScanJob.FILE_SCAN_LISTENER_NAME, JOB_INITIALIZATION_PLUGIN_NAME + '_' + getName());
                         
                         getScheduler().scheduleJob(job, trig);
-                        getLog().debug("Scheduled file scan job for data file: {}, at interval: {}", jobFile.getFileName(), scanInterval);
                     }
                     
                     processFile(jobFile);
@@ -303,18 +351,15 @@ public class XMLSchedulingDataProcessorPlugin
             return;
         }
 
+        JobSchedulingDataProcessor processor = 
+            new JobSchedulingDataProcessor(this.classLoadHelper, isValidating(), isValidatingSchema());
 
         try {
-            XMLSchedulingDataProcessor processor = 
-                new XMLSchedulingDataProcessor(this.classLoadHelper);
-            
-            processor.addJobGroupToNeverDelete(JOB_INITIALIZATION_PLUGIN_NAME);
-            processor.addTriggerGroupToNeverDelete(JOB_INITIALIZATION_PLUGIN_NAME);
-            
             processor.processFileAndScheduleJobs(
                     jobFile.getFileName(), 
                     jobFile.getFileName(), // systemId 
-                    getScheduler());
+                    getScheduler(), 
+                    isOverWriteExistingJobs());
         } catch (Exception e) {
             getLog().error("Error scheduling jobs: " + e.getMessage(), e);
         }
@@ -371,11 +416,13 @@ public class XMLSchedulingDataProcessorPlugin
                 if (!file.exists()) {
                     URL url = classLoadHelper.getResource(getFileName());
                     if(url != null) {
-                        try {
-                            furl = URLDecoder.decode(url.getPath(), "UTF-8");
-                        } catch (UnsupportedEncodingException e) {
-                            furl = url.getPath();
-                        }
+    //     we need jdk 1.3 compatibility, so we abandon this code...
+    //                    try {
+    //                        furl = URLDecoder.decode(url.getPath(), "UTF-8");
+    //                    } catch (UnsupportedEncodingException e) {
+    //                        furl = url.getPath();
+    //                    }
+                        furl = URLDecoder.decode(url.getPath()); 
                         file = new File(furl); 
                         try {
                             f = url.openStream();

@@ -24,7 +24,7 @@ import java.io.ObjectInputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.slf4j.Logger;
+import org.apache.commons.logging.Log;
 
 /**
  * <p>
@@ -44,7 +44,7 @@ public class PostgreSQLDelegate extends StdJDBCDelegate {
      * @param tablePrefix
      *          the prefix of all table names
      */
-    public PostgreSQLDelegate(Logger log, String tablePrefix, String instanceId) {
+    public PostgreSQLDelegate(Log log, String tablePrefix, String instanceId) {
         super(log, tablePrefix, instanceId);
     }
 
@@ -60,7 +60,7 @@ public class PostgreSQLDelegate extends StdJDBCDelegate {
      * @param useProperties
      *          use java.util.Properties for storage
      */
-    public PostgreSQLDelegate(Logger log, String tablePrefix, String instanceId,
+    public PostgreSQLDelegate(Log log, String tablePrefix, String instanceId,
             Boolean useProperties) {
         super(log, tablePrefix, instanceId, useProperties);
     }

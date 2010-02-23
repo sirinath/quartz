@@ -17,8 +17,8 @@
 
 package org.quartz.examples.example10;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerFactory;
 import org.quartz.SchedulerMetaData;
@@ -32,7 +32,7 @@ import org.quartz.impl.StdSchedulerFactory;
 public class PlugInExample {
 
     public void run() throws Exception {
-        Logger log = LoggerFactory.getLogger(PlugInExample.class);
+        Log log = LogFactory.getLog(PlugInExample.class);
 
         // First we must get a reference to a scheduler
         SchedulerFactory sf = new StdSchedulerFactory();

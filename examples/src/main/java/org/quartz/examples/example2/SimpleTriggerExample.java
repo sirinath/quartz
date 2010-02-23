@@ -27,8 +27,8 @@ import org.quartz.SimpleTrigger;
 import org.quartz.TriggerUtils;
 import org.quartz.impl.StdSchedulerFactory;
 
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
 
 /**
  * This Example will demonstrate all of the basics of scheduling capabilities
@@ -40,7 +40,7 @@ public class SimpleTriggerExample {
 
     
     public void run() throws Exception {
-        Logger log = LoggerFactory.getLogger(SimpleTriggerExample.class);
+        Log log = LogFactory.getLog(SimpleTriggerExample.class);
 
         log.info("------- Initializing -------------------");
 

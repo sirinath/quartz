@@ -30,8 +30,8 @@ import org.quartz.examples.example2.SimpleJob;
 import org.quartz.TriggerUtils;
 import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.impl.calendar.AnnualCalendar;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
 
 /**
  * This example will demonstrate how calendars can be used 
@@ -42,7 +42,7 @@ import org.slf4j.Logger;
 public class CalendarExample {
 
     public void run() throws Exception {
-        final Logger log = LoggerFactory.getLogger(CalendarExample.class);
+        final Log log = LogFactory.getLog(CalendarExample.class);
 
         log.info("------- Initializing ----------------------");
 

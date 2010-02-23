@@ -35,8 +35,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.Timer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.quartz.Calendar;
 import org.quartz.InterruptableJob;
 import org.quartz.Job;
@@ -51,7 +51,6 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerContext;
 import org.quartz.SchedulerException;
 import org.quartz.SchedulerListener;
-import org.quartz.SchedulerMetaData;
 import org.quartz.Trigger;
 import org.quartz.TriggerListener;
 import org.quartz.UnableToInterruptJobException;
@@ -107,13 +106,14 @@ public class QuartzScheduler implements RemotableQuartzScheduler {
                 }
             }
         } catch (IOException e) {
-            (LoggerFactory.getLogger(QuartzScheduler.class)).error(
+            (LogFactory.getLog(QuartzScheduler.class)).error(
                 "Error loading version info from build.properties.", e);
         } finally {
             if(is != null) {
                 try { is.close(); } catch(Exception ignore) {}
             }
         }
+
     }
     
 
@@ -159,11 +159,10 @@ public class QuartzScheduler implements RemotableQuartzScheduler {
 
     private boolean closed = false;
     private boolean shuttingDown = false;
-    private boolean boundRemotely = false;
 
     private Date initialStart = null;
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
+    private final Log log = LogFactory.getLog(getClass());
 
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -219,14 +218,6 @@ public class QuartzScheduler implements RemotableQuartzScheduler {
         scheduleUpdateCheck();
         
         getLog().info("Quartz Scheduler v." + getVersion() + " created.");
-        
-        getLog().info("Scheduler meta-data: " +
-                (new SchedulerMetaData(getSchedulerName(),
-                        getSchedulerInstanceId(), getClass(), boundRemotely, runningSince() != null, 
-                        isInStandbyMode(), isShutdown(), runningSince(), 
-                        numJobsExecuted(), getJobStoreClass(), 
-                        supportsPersistence(), isClustered(), getThreadPoolClass(), 
-                        getThreadPoolSize(), getVersion())).toString());
     }
 
     /*
@@ -258,7 +249,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler {
         return signaler;
     }
 
-    public Logger getLog() {
+    public Log getLog() {
         return log;
     }
     
@@ -357,8 +348,6 @@ public class QuartzScheduler implements RemotableQuartzScheduler {
         String bindName = resources.getRMIBindName();
         
         registry.rebind(bindName, exportable);
-        
-        boundRemotely = true;
 
         getLog().info("Scheduler bound to RMI registry under name '" + bindName + "'");
     }
@@ -542,10 +531,6 @@ public class QuartzScheduler implements RemotableQuartzScheduler {
 
     public boolean supportsPersistence() {
         return resources.getJobStore().supportsPersistence();
-    }
-
-    public boolean isClustered() {
-        return resources.getJobStore().isClustered();
     }
 
     public Class getThreadPoolClass() {

@@ -18,8 +18,8 @@ package org.quartz.plugins;
 import javax.transaction.Status;
 import javax.transaction.UserTransaction;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.ee.jta.UserTransactionHelper;
@@ -46,7 +46,7 @@ public abstract class SchedulerPluginWithUserTransactionSupport implements
 
     private String name;
     private Scheduler scheduler;
-    private final Logger log = LoggerFactory.getLogger(getClass());
+    private final Log log = LogFactory.getLog(getClass());
 
     // Properties
     
@@ -93,9 +93,9 @@ public abstract class SchedulerPluginWithUserTransactionSupport implements
     }
 
     /**
-     * Get the commons Logger for this class.
+     * Get the commons Log for this class.
      */
-    protected Logger getLog() {
+    protected Log getLog() {
         return log;
     }
 

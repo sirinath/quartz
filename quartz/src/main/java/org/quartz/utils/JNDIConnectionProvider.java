@@ -26,8 +26,8 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import javax.sql.XADataSource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * <p>
@@ -63,7 +63,7 @@ public class JNDIConnectionProvider implements ConnectionProvider {
 
     private boolean alwaysLookup = false;
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
+    private final Log log = LogFactory.getLog(getClass());
 
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -110,7 +110,7 @@ public class JNDIConnectionProvider implements ConnectionProvider {
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
 
-    protected Logger getLog() {
+    protected Log getLog() {
         return log;
     }
 
