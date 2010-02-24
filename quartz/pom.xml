@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.quartz-scheduler</groupId>
     <artifactId>quartz-parent</artifactId>
-    <version>1.8.0-SNAPSHOT</version>
+    <version>1.7.3</version>
   </parent>
 
   <artifactId>quartz</artifactId>
@@ -60,21 +60,22 @@
       </exclusions>
     </dependency>
 
-	<dependency>
-	  <groupId>org.slf4j</groupId>
-	  <artifactId>slf4j-api</artifactId>
-	  <version>1.5.10</version>
-	</dependency>        
-	<dependency>
-	  <groupId>org.slf4j</groupId>
-	  <artifactId>slf4j-log4j12</artifactId>
-	  <version>1.5.10</version>
-	</dependency>
-	
+    <dependency>
+      <groupId>commons-beanutils</groupId>
+      <artifactId>commons-beanutils</artifactId>
+      <version>1.8.2</version>
+      <optional>true</optional>
+    </dependency>
     <dependency>
       <groupId>commons-dbcp</groupId>
       <artifactId>commons-dbcp</artifactId>
       <version>1.2.2</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>commons-digester</groupId>
+      <artifactId>commons-digester</artifactId>
+      <version>1.8.1</version>
       <optional>true</optional>
     </dependency>
     <dependency>
@@ -87,6 +88,13 @@
       <groupId>commons-pool</groupId>
       <artifactId>commons-pool</artifactId>
       <version>1.3</version>
+      <scope>runtime</scope>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>commons-validator</groupId>
+      <artifactId>commons-validator</artifactId>
+      <version>1.3.1</version>
       <scope>runtime</scope>
       <optional>true</optional>
     </dependency>

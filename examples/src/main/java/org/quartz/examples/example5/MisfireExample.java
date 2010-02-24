@@ -27,8 +27,8 @@ import org.quartz.SimpleTrigger;
 import org.quartz.TriggerUtils;
 import org.quartz.impl.StdSchedulerFactory;
 
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
 
 /**
  * Demonstrates the behavior of <code>StatefulJob</code>s, as well as how
@@ -57,7 +57,7 @@ public class MisfireExample {
 
     
     public void run() throws Exception {
-        Logger log = LoggerFactory.getLogger(MisfireExample.class);
+        Log log = LogFactory.getLog(MisfireExample.class);
 
         log.info("------- Initializing -------------------");
 

@@ -19,8 +19,8 @@ package org.quartz.examples.example9;
 
 import java.util.Date;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.quartz.JobDetail;
 import org.quartz.JobListener;
 import org.quartz.Scheduler;
@@ -39,7 +39,7 @@ import org.quartz.impl.StdSchedulerFactory;
 public class ListenerExample {
 
     public void run() throws Exception {
-        Logger log = LoggerFactory.getLogger(ListenerExample.class);
+        Log log = LogFactory.getLog(ListenerExample.class);
 
         log.info("------- Initializing ----------------------");
 

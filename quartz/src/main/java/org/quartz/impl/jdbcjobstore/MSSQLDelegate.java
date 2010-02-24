@@ -23,7 +23,7 @@ import java.io.ObjectInputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.slf4j.Logger;
+import org.apache.commons.logging.Log;
 
 /**
  * <p>
@@ -43,11 +43,11 @@ public class MSSQLDelegate extends StdJDBCDelegate {
      * @param tablePrefix
      *          the prefix of all table names
      */
-    public MSSQLDelegate(Logger log, String tablePrefix, String instanceId) {
+    public MSSQLDelegate(Log log, String tablePrefix, String instanceId) {
         super(log, tablePrefix, instanceId);
     }
 
-    public MSSQLDelegate(Logger log, String tablePrefix, String instanceId, Boolean useProperties) {
+    public MSSQLDelegate(Log log, String tablePrefix, String instanceId, Boolean useProperties) {
         super(log, tablePrefix, instanceId, useProperties);
     }
 

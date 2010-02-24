@@ -18,8 +18,8 @@
 
 package org.quartz.core;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.spi.SchedulerSignaler;
@@ -32,7 +32,7 @@ import org.quartz.spi.SchedulerSignaler;
  */
 public class SchedulerSignalerImpl implements SchedulerSignaler {
 
-    Logger log = LoggerFactory.getLogger(SchedulerSignalerImpl.class);
+	Log log = LogFactory.getLog(SchedulerSignalerImpl.class);
 	
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

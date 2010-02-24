@@ -19,8 +19,8 @@ package org.quartz.examples.example13;
 
 import java.util.Date;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
@@ -35,7 +35,7 @@ import org.quartz.JobExecutionException;
  */
 public class SimpleRecoveryJob implements Job {
 
-    private static Logger _log = LoggerFactory.getLogger(SimpleRecoveryJob.class);
+    private static Log _log = LogFactory.getLog(SimpleRecoveryJob.class);
 
     private static final String COUNT = "count";
     

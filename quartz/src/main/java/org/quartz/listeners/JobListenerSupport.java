@@ -15,8 +15,8 @@
  */
 package org.quartz.listeners;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.quartz.JobListener;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -39,13 +39,13 @@ import org.quartz.JobExecutionException;
  * @see org.quartz.JobListener
  */
 public abstract class JobListenerSupport implements JobListener {
-    private final Logger log = LoggerFactory.getLogger(getClass());
+    private final Log log = LogFactory.getLog(getClass());
 
     /**
-     * Get the <code>{@link org.slf4j.Logger}</code> for this
+     * Get the <code>{@link org.apache.commons.logging.Log}</code> for this
      * class's category.  This should be used by subclasses for logging.
      */
-    protected Logger getLog() {
+    protected Log getLog() {
         return log;
     }
 

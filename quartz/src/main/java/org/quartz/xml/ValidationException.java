@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.Iterator;
 
 /**
- * Reports JobSchedulingDataLoader validation exceptions.
+ * Reports QuartzMetaDataProcessor validation exceptions.
  * 
  * @author <a href="mailto:bonhamcm@thirdeyeconsulting.com">Chris Bonham</a>
  */
@@ -69,27 +69,10 @@ public class ValidationException extends Exception {
      * @param errors
      *          collection of validation exceptions.
      */
-    public ValidationException(Collection<Exception> errors) {
+    public ValidationException(Collection errors) {
         this();
         this.validationExceptions = Collections
                 .unmodifiableCollection(validationExceptions);
-        initCause(errors.iterator().next());
-    }
-    
-
-    /**
-     * Constructor for ValidationException.
-     * 
-     * @param message
-     *          exception message.
-     * @param errors
-     *          collection of validation exceptions.
-     */
-    public ValidationException(String message, Collection<Exception> errors) {
-        this(message);
-        this.validationExceptions = Collections
-                .unmodifiableCollection(validationExceptions);
-        initCause(errors.iterator().next());
     }
 
     /*
@@ -135,6 +118,4 @@ public class ValidationException extends Exception {
 
         return sb.toString();
     }
-    
-    
 }

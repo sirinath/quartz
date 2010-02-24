@@ -93,7 +93,7 @@ public class InitThreadContextClassLoadHelper implements ClassLoadHelper {
     }
 
     /**
-     * Enable sharing of the class-loader with 3rd party.
+     * Enable sharing of the class-loader with 3rd party (e.g. digester).
      *
      * @return the class-loader user be the helper.
      */

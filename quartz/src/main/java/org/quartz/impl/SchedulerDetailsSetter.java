@@ -4,8 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.quartz.SchedulerException;
 
 /**
@@ -19,7 +19,8 @@ import org.quartz.SchedulerException;
  */
 class SchedulerDetailsSetter {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SchedulerDetailsSetter.class);
+    private static final Log LOGGER = LogFactory
+            .getLog(SchedulerDetailsSetter.class);
 
     private SchedulerDetailsSetter() {
         //
@@ -38,7 +39,7 @@ class SchedulerDetailsSetter {
         try {
             setter = target.getClass().getMethod(method, String.class);
         } catch (SecurityException e) {
-            LOGGER.error("A SecurityException occured: " + e.getMessage(), e);
+            LOGGER.error(e);
             return;
         } catch (NoSuchMethodException e) {
             // This probably won't happen since the interface has the method

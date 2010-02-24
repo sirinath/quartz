@@ -19,8 +19,8 @@ package org.quartz.impl.jdbcjobstore;
 import java.sql.Connection;
 import java.util.HashSet;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * Base class for database based lock handlers for providing thread/resource locking 
@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 public abstract class DBSemaphore implements Semaphore, Constants,
     StdJDBCConstants, TablePrefixAware {
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
+    private final Log log = LogFactory.getLog(getClass());
 
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -70,7 +70,7 @@ public abstract class DBSemaphore implements Semaphore, Constants,
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
 
-    protected Logger getLog() {
+    protected Log getLog() {
         return log;
     }
 
@@ -100,7 +100,7 @@ public abstract class DBSemaphore implements Semaphore, Constants,
 
         lockName = lockName.intern();
 
-        Logger log = getLog();
+        Log log = getLog();
         
         if(log.isDebugEnabled()) {
             log.debug(

@@ -19,8 +19,8 @@ package org.quartz.examples.example4;
 
 import java.util.Date;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -36,7 +36,7 @@ import org.quartz.StatefulJob;
  */
 public class ColorJob implements StatefulJob {
 
-    private static Logger _log = LoggerFactory.getLogger(ColorJob.class);
+    private static Log _log = LogFactory.getLog(ColorJob.class);
     
     // parameter names specific to this job
     public static final String FAVORITE_COLOR = "favorite color";
